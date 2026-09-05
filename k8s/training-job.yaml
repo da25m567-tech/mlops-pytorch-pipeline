@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mlops-training
+  namespace: mlops
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: mlops-training
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: training
+          image: mlops-pytorch-train:latest
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: PYTHONPATH
+              value: /app
+
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
